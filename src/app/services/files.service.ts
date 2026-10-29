@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Injectable } from '@angular/core';
+import { FileModel } from '../models/file';
 
 @Injectable()
 export class FileService {
@@ -10,7 +11,7 @@ export class FileService {
         private _http: HttpClient,
     ) {}
 
-    async postFiles(files: File[]): Promise<any> {
+    async postFiles(files: FileModel[]): Promise<any> {
         const url = this.apiFiles
         const request = '/api/testingfiles/'
 

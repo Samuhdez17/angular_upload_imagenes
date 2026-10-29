@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FileService } from '../../services/files.service';
+import { FileModel } from '../../models/file';
 
 @Component({
   selector: 'app-upload-files',
@@ -9,7 +10,7 @@ import { FileService } from '../../services/files.service';
 })
 
 export class UploadFiles {
-  files!: Array<File>
+  files!: Array<FileModel>
 
   constructor(
     private _fileService: FileService,
@@ -27,13 +28,13 @@ export class UploadFiles {
   const content = Array.from(input.files ?? []);
 
   this.files = await Promise.all(
-    content.map(async (f) => new File(f.name, await this.archivoABase64(f)))
+    content.map(async (f) => new FileModel(f.name, await this.archivoABase64(f)))
   );
 
   input.value = ''; // permite volver a elegir el mismo archivo
   }
 
-  private archivoABase64(archivo: File): Promise<string> {
+  private archivoABase64(archivo: string): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
 
