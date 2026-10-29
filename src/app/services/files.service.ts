@@ -10,10 +10,12 @@ export class FileService {
         private _http: HttpClient,
     ) {}
 
-    async postFiles(file: File) {
+    async postFiles(files: File[]): Promise<any> {
         const url = this.apiFiles
         const request = '/api/testingfiles/'
 
-        return this._http.post(url + request, file)
+        let body = JSON.stringify(files)
+
+        return this._http.post(url + request, body)
     }
 }
