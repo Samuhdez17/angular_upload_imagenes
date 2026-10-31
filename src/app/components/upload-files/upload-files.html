@@ -1,0 +1,11 @@
+<input #selector type="file" accept="image/*" multiple hidden (change)="onFilesSelected($event)" />
+
+<button type="button" (click)="selector.click()">Seleccionar imágenes</button>
+
+<ul>
+    @for (f of files; track f.fileName) {
+    <li>{{ f.fileName }}</li>
+    }
+</ul>
+
+<button type="button" (click)="subir()" [disabled]="files.length === 0">Subir</button>

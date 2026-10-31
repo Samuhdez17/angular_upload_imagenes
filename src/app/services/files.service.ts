@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Injectable } from '@angular/core';
-import { FileModel } from '../models/file';
+import { FileModel } from '../models/file_model';
 
 @Injectable()
 export class FileService {
