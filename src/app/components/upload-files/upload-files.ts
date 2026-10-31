@@ -19,32 +19,4 @@ export class UploadFiles {
   subir(): void {
     this._fileService.postFiles(this.files)
   }
-
-  async onFilesSelected(event: Event): Promise<void> {
-  const input = event.target as HTMLInputElement;
-  if (!input.files?.length) 
-    return;
-  
-  const content = Array.from(input.files ?? []);
-
-  this.files = await Promise.all(
-    content.map(async (f) => new FileModel(f.name, await this.archivoABase64(f)))
-  );
-
-  input.value = ''; // permite volver a elegir el mismo archivo
-  }
-
-  private archivoABase64(archivo: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        const resultado = reader.result as string;
-        resolve(resultado.split(',')[1]);
-      };
-
-      reader.onerror = () => reject(reader.error);
-      reader.readAsDataURL(archivo);
-    });
-  }
 }
