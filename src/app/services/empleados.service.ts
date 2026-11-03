@@ -34,7 +34,6 @@ export class EmpleadosService {
 
     async getSubordinadosAsync(): Promise<Empleado[]>{
         let request = "api/empleados/subordinados";
-        console.log("getSubordinadosAsync(): token: ", sessionStorage.getItem("TOKEN"));
         
         return firstValueFrom(
             this._http.get<Empleado[]>(this.url + request)

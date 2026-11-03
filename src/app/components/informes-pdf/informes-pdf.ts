@@ -10,12 +10,13 @@ import autoTable from 'jspdf-autotable';
 })
 export class InformesPdf {
   generarPDF() {
-    let doc: jsPDF = new jsPDF();
+    let doc = new jsPDF();
 
     doc.setFontSize(16)
     doc.text('Informe de ejemplo', 10, 20);
     doc.setFontSize(12)
 
+    // INFO DE LA TABLA
     const headers = ['Nombre', 'Edad', 'Ciudad']
     const data = [
       ['Juan Pérez', '30', 'Madrid'],
@@ -23,6 +24,7 @@ export class InformesPdf {
       ['Pedro García', '35', 'Valencia'],
     ]
 
+    // GENERAR TABLA
     autoTable(doc, {
       head: [headers],
       body: data,
