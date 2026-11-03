@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import { FileService } from '../../services/files.service';
 import { FileModel } from '../../models/file_model';
 
@@ -10,39 +10,45 @@ import { FileModel } from '../../models/file_model';
 })
 
 export class UploadFiles {
-  files: Array<FileModel> = []
+  file: FileModel | null = null;
+
+  @ViewChild('selector') selector!: ElementRef
 
   constructor(
     private _fileService: FileService,
     private _cdr: ChangeDetectorRef,
   ) {}
 
-  onFilesSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (!input.files) return;
-
-    Array.from(input.files).forEach((file) => {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        // reader.result = "data:image/png;base64,AAAA..."
-        const base64 = reader.result as string;
-
-        this.files.push(new FileModel(file.name, base64));
-      };
-
-      reader.readAsDataURL(file);
-    });
-
-    input.value = ''; // permite volver a elegir el mismo archivo
-  }
-
   async subir() {
-    try {
-      await this._fileService.postFiles(this.files);
+    let file = this.selector.nativeElement.files[0]
+    let path = this.selector.nativeElement.value.split('\\') // Nombre fichero: path[2]
 
-    } catch (error) {
-      throw (error)
+    let reader = new FileReader()
+
+    reader.onloadend = async () => {
+      let buffer: ArrayBuffer
+      buffer = reader.result as ArrayBuffer
+
+      let base64: string
+      base64 = btoa(new Uint8Array(buffer)
+        .reduce((data, byte) => data + String.fromCharCode(byte), '')
+      )
+
+      this.file = new FileModel(path[2], base64)
+
+      try {
+        await this._fileService.postFiles(this.file)
+        this.selector.nativeElement.value = ''
+
+      } catch (error) {
+        throw error
+      }
+
     }
+
+    reader.readAsArrayBuffer(file)
+
+    this._cdr.detectChanges()
+
   }
 }
